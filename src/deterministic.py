@@ -20,31 +20,48 @@ def sir_deterministic(
     susceptible_pop, infectious_pop, recovered_pop = y
     total_pop = susceptible_pop + infectious_pop + recovered_pop
 
-    new_susceptible_pop = -beta * infectious_pop * susceptible_pop / total_pop
-    new_recovered_pop = gamma * infectious_pop
-    new_infectious_pop = -new_susceptible_pop - new_recovered_pop
+    susceptible_rate = -beta * infectious_pop * susceptible_pop / total_pop
+    recovered_rate = gamma * infectious_pop
+    infectious_rate = -susceptible_rate - recovered_rate
 
-    return [new_susceptible_pop, new_infectious_pop, new_recovered_pop]
+    return [susceptible_rate, infectious_rate, recovered_rate]
 
-y0 = [4980, 20, 0]
-beta = 0.4
-gamma = 0.2
-t_span = (0, 200)
-t_eval = np.linspace(*t_span, 600)
 
-solution = solve_ivp(
-    sir_deterministic,
-    t_span,
-    y0,
-    args=(beta, gamma),
-    t_eval=t_eval,
-)
+def main():
+    # variables to mess around with
+    total_population = 5000
+    starting_infectious_population = 50
+    beta = 0.5
+    gamma = 0.1
+    total_days_to_simulate = 70
 
-plot.plot(solution.t, solution.y[0], label="Susceptible")
-plot.plot(solution.t, solution.y[1], label="Infectious")
-plot.plot(solution.t, solution.y[2], label="Recovered")
-plot.xlabel("Time (days)")
-plot.ylabel("People")
-plot.title(f"SIR Deterministic model beta = {beta:.1f}, gamma = {gamma:.1f}")
-plot.legend()
-plot.show()
+    y0 = [
+        total_population - starting_infectious_population,
+        starting_infectious_population,
+        0,
+    ]
+    t_span = (0, total_days_to_simulate)
+    t_eval = np.linspace(*t_span, 600)
+
+    solution = solve_ivp(
+        sir_deterministic,
+        t_span,
+        y0,
+        args=(beta, gamma),
+        t_eval=t_eval,
+    )
+
+    assert solution.success, solution.message
+
+    plot.plot(solution.t, solution.y[0], label="Susceptible", color="#0077BB")
+    plot.plot(solution.t, solution.y[1], label="Infectious", color="#CC3311")
+    plot.plot(solution.t, solution.y[2], label="Recovered", color="#117733")
+    plot.xlabel("Time (days)")
+    plot.ylabel("People")
+    plot.title(f"SIR Deterministic model beta = {beta:.1f}, gamma = {gamma:.1f}")
+    plot.legend()
+    plot.show()
+
+
+if __name__ == "__main__":
+    main()
