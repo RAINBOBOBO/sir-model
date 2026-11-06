@@ -58,7 +58,9 @@ def main():
     plot.plot(solution.t, solution.y[2], label="Recovered", color="#117733")
     plot.xlabel("Time (days)")
     plot.ylabel("People")
-    plot.title(f"SIR Deterministic model beta = {beta:.1f}, gamma = {gamma:.1f}")
+    plot.title(
+        f"SIR Deterministic model beta = {beta:.1f}, gamma = {gamma:.1f}"
+    )
     plot.legend()
     plot.show()
 
