@@ -5,14 +5,19 @@ import matplotlib.pyplot as plot
 
 def sir_deterministic(
         _t: float,
-        initial_conditions: list[int, int, int],
+        y: list[float],
         beta: float,
         gamma: float,
-    ) -> list[float, float, float]:
+    ) -> list[float]:
     """
     _t is unused since SIR doesn't factor time into the calculation
+    y is the state of the SIR values
+    beta is the infection rate constant in 
+        ppl infected per day per infected person
+    gamma is the recovery rate constant in
+        ppl recovered per day per infected person
     """
-    susceptible_pop, infectious_pop, recovered_pop = initial_conditions
+    susceptible_pop, infectious_pop, recovered_pop = y
     total_pop = susceptible_pop + infectious_pop + recovered_pop
 
     new_susceptible_pop = -beta * infectious_pop * susceptible_pop / total_pop
