@@ -33,7 +33,7 @@ def main():
     starting_infectious_population = 50
     beta = 0.5
     gamma = 0.1
-    total_days_to_simulate = 70
+    total_days_to_simulate = 80
 
     y0 = [
         total_population - starting_infectious_population,
